@@ -49,14 +49,14 @@ def detect_motion(current_frame_bytes):
     # Apply Gaussian blur to reduce noise
     gray = cv2.GaussianBlur(gray, GAUSSIAN_BLUR_SIZE, 0)
 
-    # If no previous frame, store this one and return no motion
-    if previous_frame is None:
+    # If no previous frame or shape mismatch, store this one and return no motion
+    if previous_frame is None or previous_frame.shape != gray.shape:
         previous_frame = gray
         return {
             "motion": False,
             "score": 0.0,
             "contours": 0,
-            "message": "First frame — stored as reference. No motion detected yet."
+            "message": "Baseline frame set. No motion detected yet."
         }
 
     # Compute absolute difference between current and previous frame
